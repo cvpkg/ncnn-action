@@ -15,9 +15,14 @@ runs:
     - name: clone ncnn
       run: git clone https://github.com/tencent/ncnn --depth 1
       shell: bash
+
     - name: echo CC and CXX
       run: echo CC_path set to ${{ inputs.CC_path }} and CXX_path set to ${{ inputs.CXX_path }}
       shell: bash
+
+    - name: Setup Ninja
+      uses: seanmiddleditch/gha-setup-ninja@v3
+
     - name: configure ncnn
       run: |
         compiler=''
@@ -32,12 +37,13 @@ runs:
         echo "cmake compiler set to: ${compiler}"
         
         if [ "$RUNNER_OS" == "Windows" ]; then
-          cmake ${compiler} . -B build -DCMAKE_INSTALL_PREFIX=D:/artifacts/ncnn/master
+          cmake ${compiler} . -B build -G Ninja -DCMAKE_INSTALL_PREFIX=D:/artifacts/ncnn/master
         else
-          cmake ${compiler} -DCMAKE_BUILD_TYPE=Release . -B build -DCMAKE_INSTALL_PREFIX=~/artifacts/ncnn/master
+          cmake ${compiler} -DCMAKE_BUILD_TYPE=Release . -B build -G Ninja -DCMAKE_INSTALL_PREFIX=~/artifacts/ncnn/master
         fi
       working-directory: ncnn
       shell: bash
+
     - name: build ncnn
       run: |
         if [ "$RUNNER_OS" == "Windows" ]; then
@@ -47,6 +53,7 @@ runs:
         fi
       working-directory: ncnn/build
       shell: bash
+
     - name: install ncnn
       run: |
         if [ "$RUNNER_OS" == "Windows" ]; then
@@ -76,6 +83,7 @@ runs:
     #       sudo cp -R googletest/googletest/include/gtest /usr/local/include
     #     fi
     #   shell: bash
+
     - name: clean up
       run: |
         if [ "$RUNNER_OS" == "Windows" ]; then
@@ -84,6 +92,7 @@ runs:
           sudo rm -R ncnn
         fi
       shell: bash
+
 branding:
   icon: activity
   color: gray-dark
