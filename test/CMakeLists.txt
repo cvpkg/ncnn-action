@@ -20,6 +20,6 @@ if(DEFINED ENV{GITHUB_ACTIONS})
   find_package(ncnn REQUIRED)
 endif()
 
-add_executable(testbed tested.cpp)
+add_executable(testbed testbed.cpp)
 target_link_libraries(testbed ncnn)
 
