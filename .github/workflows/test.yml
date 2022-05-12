@@ -17,13 +17,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Install googletest not macOs
+      - name: Install ncnn not macOs
         uses: ./
         if: matrix.os != 'macOs-latest'
       - name: install gcc-10 on macOs
         if: matrix.os == 'macOs-latest'
         run: brew install gcc@10
-      - name: install googletest macOs
+      - name: install ncnn macOs
         if: matrix.os == 'macOs-latest'
         uses: ./
         with: # Set CC_path and CXX_path to gcc-10 and g++-10

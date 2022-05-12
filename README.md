@@ -27,6 +27,8 @@ if(DEFINED ENV{GITHUB_ACTIONS})
     set(ARTIFACTS_DIR "~/artifacts")
   endif()
   set(ncnn_DIR "${ARTIFACTS_DIR}/ncnn/master")
+  message(STATUS "ARTIFACTS_DIR is: ${ARTIFACTS_DIR}")
+  message(STATUS "ncnn_DIR is: ${ncnn_DIR}")
   find_package(ncnn REQUIRED)
 endif()
 ```
