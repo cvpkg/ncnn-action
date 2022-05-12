@@ -23,5 +23,10 @@ if(DEFINED ENV{GITHUB_ACTIONS} AND DEFINED ENV{GITHUB_WORKSPACE})
 endif()
 ```
 
+The installed ncnn package root directory will be:
+- Windows: `D:\a\ncnn-installer\ncnn-installer/artifacts/ncnn/master`
+- Linux: `/home/runner/work/ncnn-installer/ncnn-installer/artifacts/ncnn/master`
+- macOSX: `/Users/runner/work/ncnn-installer/ncnn-installer/artifacts/ncnn/master`
+
 ## References
 - [ncnn](https://github.com/tencent/ncnn)
