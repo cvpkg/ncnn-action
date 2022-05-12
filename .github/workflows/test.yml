@@ -54,10 +54,10 @@ jobs:
         working-directory: test/build
       - name: run test not windows
         if: matrix.os != 'windows-latest'
-        run: ./test
+        run: ./testbed
         working-directory: test/build
       #- name: run test windows
       #  if: matrix.os == 'windows-latest'
-      #  run: test.exe
+      #  run: testbed.exe
       #  working-directory: test/build
       #  shell: cmd
