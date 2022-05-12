@@ -1,0 +1,89 @@
+name: 'ncnn installer'
+description: 'Build and install ncnn'
+inputs:
+  CC_path:
+    description: 'A path to the CC compiler'
+    required: false
+    default: ''
+  CXX_path:
+    description: 'A path to the CXX compiler'
+    required: false
+    default: ''
+runs:
+  using: "composite"
+  steps:
+    - name: clone ncnn
+      run: git clone https://github.com/tencent/ncnn --depth 1
+      shell: bash
+    - name: echo CC and CXX
+      run: echo CC_path set to ${{ inputs.CC_path }} and CXX_path set to ${{ inputs.CXX_path }}
+      shell: bash
+    - name: configure ncnn
+      run: |
+        compiler=''
+        if [ ! -z "${{ inputs.CC_path }}" ]; then
+          compiler="-DCMAKE_C_COMPILER=${{ inputs.CC_path }}"
+        fi
+        
+        if [ ! -z "${{ inputs.CXX_path }}" ]; then
+          compiler="${compiler} -DCMAKE_CXX_COMPILER=${{ inputs.CXX_path }}"
+        fi
+        
+        echo "cmake compiler set to: ${compiler}"
+        
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          cmake ${compiler} . -B build -DCMAKE_INSTALL_PREFIX=D:/artifacts/ncnn/master
+        else
+          cmake ${compiler} -DCMAKE_BUILD_TYPE=Release . -B build -DCMAKE_INSTALL_PREFIX=~/artifacts/ncnn/master
+        fi
+      working-directory: ncnn
+      shell: bash
+    - name: build ncnn
+      run: |
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          cmake --build . --config Release
+        else
+          sudo cmake --build .
+        fi
+      working-directory: ncnn/build
+      shell: bash
+    - name: install ncnn
+      run: |
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          cmake --build . --config Release --target install
+        else
+          cmake --build . --target install
+        fi
+      working-directory: ncnn/build
+      shell: bash
+    # - name: copy deps
+    #   run: |
+    #     if [ "$RUNNER_OS" == "Linux" ]; then
+    #       sudo cp googletest/build/lib/*.a /usr/lib
+    #       sudo ln -s /usr/lib/libgtest.a /usr/local/lib/libgtest.a
+    #       sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
+    #       sudo cp -R googletest/googletest/include/gtest /usr/include
+    #     elif [ "$RUNNER_OS" == "Windows" ]; then
+    #       mkdir D:/gtest
+    #       mkdir D:/gtest/lib
+    #       mkdir D:/gtest/include
+    #       cp -R googletest/googletest/include/gtest D:/gtest/include
+    #       cp googletest/build/lib/Release/gtest.lib D:/gtest/lib
+    #       cp googletest/build/lib/Release/gtest_main.lib D:/gtest/lib
+    #     else
+    #       sudo cp googletest/build/lib/libgtest.a /usr/local/lib/libgtest.a
+    #       sudo cp googletest/build/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
+    #       sudo cp -R googletest/googletest/include/gtest /usr/local/include
+    #     fi
+    #   shell: bash
+    - name: clean up
+      run: |
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          rm -R ncnn
+        else
+          sudo rm -R ncnn
+        fi
+      shell: bash
+branding:
+  icon: activity
+  color: gray-dark
