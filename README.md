@@ -19,17 +19,11 @@ action.yml:
 To set the correct paths, you could add to your `CMakeLists.txt`:
 ```cmake
 if(DEFINED ENV{GITHUB_ACTIONS})
-  if(WIN32)
-    set(ARTIFACTS_DIR "D:/artifacts")
-    #set(CMAKE_CXX_FLAGS_RELEASE "/MT")
-    #set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
-  else()
-    set(ARTIFACTS_DIR "$ENV{GITHUB_ACTIONS}/artifacts")
-  endif()
+  set(ARTIFACTS_DIR "$ENV{GITHUB_ACTIONS}/artifacts")
   set(ncnn_DIR "${ARTIFACTS_DIR}/ncnn/master/lib/cmake/ncnn")
-  message(STATUS "ENV{GITHUB_ACTIONS} is: $ENV{GITHUB_ACTIONS}")
-  message(STATUS "ARTIFACTS_DIR is: ${ARTIFACTS_DIR}")
-  message(STATUS "ncnn_DIR is: ${ncnn_DIR}")
+  message(STATUS ">>> ENV{GITHUB_ACTIONS} is: $ENV{GITHUB_ACTIONS}")
+  message(STATUS ">>> ARTIFACTS_DIR is: ${ARTIFACTS_DIR}")
+  message(STATUS ">>> ncnn_DIR is: ${ncnn_DIR}")
   find_package(ncnn REQUIRED)
 endif()
 ```
