@@ -49,7 +49,7 @@ runs:
         if [ "$RUNNER_OS" == "Windows" ]; then
           cmake --build . --config Release
         else
-          sudo cmake --build .
+          cmake --build .
         fi
       working-directory: ncnn/build
       shell: bash
@@ -89,7 +89,7 @@ runs:
         if [ "$RUNNER_OS" == "Windows" ]; then
           rm -R ncnn
         else
-          sudo rm -R ncnn
+          rm -R ncnn
         fi
       shell: bash
 
