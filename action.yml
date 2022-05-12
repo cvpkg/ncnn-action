@@ -37,7 +37,7 @@ runs:
         echo "cmake compiler set to: ${compiler}"
         
         if [ "$RUNNER_OS" == "Windows" ]; then
-          cmake ${compiler} . -B build -T v143,host=x64 -A x64 -DCMAKE_INSTALL_PREFIX="$env:GITHUB_WORKSPACE\ncnn\master" -DNCNN_BUILD_BENCHMARK=OFF
+          cmake ${compiler} . -B build -T v143,host=x64 -A x64 -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/ncnn/master" -DNCNN_BUILD_BENCHMARK=OFF
         else
           cmake ${compiler} -DCMAKE_BUILD_TYPE=Release . -B build -G Ninja -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/artifacts/ncnn/master -DNCNN_BUILD_BENCHMARK=OFF
         fi
