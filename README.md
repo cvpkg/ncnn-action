@@ -8,7 +8,7 @@ Install ncnn on Github Actions, provided as re-usable "configure-build-install-e
 action.yml:
 ```yml
 - name: Install ncnn
-  uses: cvpkg/ncnn-installer@v0.1
+  uses: cvpkg/ncnn-action@v0.1
   with:
     ncnn_tag: '20220420' # or master
 ```
