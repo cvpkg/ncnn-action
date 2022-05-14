@@ -13,7 +13,7 @@ inputs:
   ncnn_tag:
     description: 'The tag(release version) of ncnn'
     required: true
-    default: '20220420'
+    default: '20220420' # or master
 runs:
   using: "composite"
   steps:
