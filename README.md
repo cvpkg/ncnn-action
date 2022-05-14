@@ -28,9 +28,9 @@ endif()
 ```
 
 The installed ncnn package root directory will be:
-- Windows: `D:\a\ncnn-installer\ncnn-installer/artifacts/ncnn/master`
-- Linux: `/home/runner/work/ncnn-installer/ncnn-installer/artifacts/ncnn/master`
-- macOSX: `/Users/runner/work/ncnn-installer/ncnn-installer/artifacts/ncnn/master`
+- Windows: `D:\a\<your_repo>\<your_repo>/artifacts/ncnn/master`
+- Linux: `/home/runner/work/<your_repo>/<your_repo>/artifacts/ncnn/master`
+- macOSX: `/Users/runner/work/<your_repo>/<your_repo>/artifacts/ncnn/master`
 
 ## References
 - [ncnn](https://github.com/tencent/ncnn)
