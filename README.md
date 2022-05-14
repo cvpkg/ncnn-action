@@ -1,4 +1,4 @@
-# ncnn-installer
+# ncnn-action
 
 Install ncnn on Github Actions, provided as re-usable "configure-build-install-export-import" steps.
 
