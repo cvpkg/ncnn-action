@@ -3,9 +3,6 @@ project(use_ncnn_example)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-message(STATUS "CC set to: $ENV{CC}")
-message(STATUS "CXX set to:$ENV{CXX}")
-
 if(DEFINED ENV{GITHUB_ACTIONS} AND DEFINED ENV{GITHUB_WORKSPACE})
   set(ARTIFACTS_DIR "$ENV{GITHUB_WORKSPACE}/artifacts")
   if(CMAKE_SYSTEM_NAME MATCHES "Windows")
