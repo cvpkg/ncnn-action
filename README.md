@@ -1,5 +1,7 @@
 # ncnn-action
 
+[![test](https://github.com/cvpkg/ncnn-action/actions/workflows/test.yml/badge.svg)](https://github.com/cvpkg/ncnn-action/actions/workflows/test.yml)
+
 Install ncnn on Github Actions, provided as re-usable "configure-build-install-export-import" steps.
 
 (Currently disabled Vulkan and OpenMP for fast build speed)

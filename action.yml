@@ -2,14 +2,6 @@
 name: 'ncnn installer'
 description: 'Build and install ncnn'
 inputs:
-  CC_path:
-    description: 'A path to the CC compiler'
-    required: false
-    default: ''
-  CXX_path:
-    description: 'A path to the CXX compiler'
-    required: false
-    default: ''
   ncnn_tag:
     description: 'The tag(release version) of ncnn'
     required: true
@@ -24,8 +16,12 @@ runs:
         git checkout ${{ inputs.ncnn_tag }}
       shell: bash
 
-    - name: echo CC and CXX
-      run: echo CC_path set to ${{ inputs.CC_path }} and CXX_path set to ${{ inputs.CXX_path }}
+    # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
+    - name: Set env
+      run: echo "ncnn_tag=${{ inputs.ncnn_tag }}" >> $GITHUB_ENV
+      shell: bash
+    - name: Test env
+      run: echo $ncnn_tag
       shell: bash
 
     - name: Setup Ninja
@@ -33,21 +29,12 @@ runs:
 
     - name: configure ncnn
       run: |
-        compiler=''
-        if [ ! -z "${{ inputs.CC_path }}" ]; then
-          compiler="-DCMAKE_C_COMPILER=${{ inputs.CC_path }}"
-        fi
-        
-        if [ ! -z "${{ inputs.CXX_path }}" ]; then
-          compiler="${compiler} -DCMAKE_CXX_COMPILER=${{ inputs.CXX_path }}"
-        fi
-        
-        echo "cmake compiler set to: ${compiler}"
-        
         if [ "$RUNNER_OS" == "Windows" ]; then
-          cmake ${compiler} . -B build -T v143,host=x64 -A x64 -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/artifacts/ncnn/${ncnn_tag}" -DNCNN_BUILD_BENCHMARK=OFF -DNCNN_RUNTIME_CPU=OFF -DNCNN_OPENMP=OFF -DNCNN_VULKAN=OFF
-        else
-          cmake ${compiler} -DCMAKE_BUILD_TYPE=Release . -B build -G Ninja -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/artifacts/ncnn/${ncnn_tag} -DNCNN_BUILD_BENCHMARK=OFF -DNCNN_RUNTIME_CPU=OFF -DNCNN_OPENMP=OFF -DNCNN_VULKAN=OFF
+          cmake . -B build -T v143,host=x64 -A x64 -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/artifacts/ncnn/${ncnn_tag}/windows-x64" -DNCNN_BUILD_BENCHMARK=OFF -DNCNN_RUNTIME_CPU=OFF -DNCNN_OPENMP=OFF -DNCNN_VULKAN=OFF
+        elif [ "$RUNNER_OS" == "Linux" ]; then
+          cmake . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/artifacts/ncnn/${ncnn_tag}/linux-x64 -DNCNN_BUILD_BENCHMARK=OFF -DNCNN_RUNTIME_CPU=OFF -DNCNN_OPENMP=OFF -DNCNN_VULKAN=OFF
+        elif [ "$RUNNER_OS" == "macOS" ]; then
+          cmake . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/artifacts/ncnn/${ncnn_tag}/mac-x64 -DNCNN_BUILD_BENCHMARK=OFF -DNCNN_RUNTIME_CPU=OFF -DNCNN_OPENMP=OFF -DNCNN_VULKAN=OFF
         fi
       working-directory: ncnn
       shell: bash
@@ -71,34 +58,9 @@ runs:
         fi
       working-directory: ncnn/build
       shell: bash
-    # - name: copy deps
-    #   run: |
-    #     if [ "$RUNNER_OS" == "Linux" ]; then
-    #       sudo cp googletest/build/lib/*.a /usr/lib
-    #       sudo ln -s /usr/lib/libgtest.a /usr/local/lib/libgtest.a
-    #       sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
-    #       sudo cp -R googletest/googletest/include/gtest /usr/include
-    #     elif [ "$RUNNER_OS" == "Windows" ]; then
-    #       mkdir D:/gtest
-    #       mkdir D:/gtest/lib
-    #       mkdir D:/gtest/include
-    #       cp -R googletest/googletest/include/gtest D:/gtest/include
-    #       cp googletest/build/lib/Release/gtest.lib D:/gtest/lib
-    #       cp googletest/build/lib/Release/gtest_main.lib D:/gtest/lib
-    #     else
-    #       sudo cp googletest/build/lib/libgtest.a /usr/local/lib/libgtest.a
-    #       sudo cp googletest/build/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
-    #       sudo cp -R googletest/googletest/include/gtest /usr/local/include
-    #     fi
-    #   shell: bash
 
     - name: clean up
-      run: |
-        if [ "$RUNNER_OS" == "Windows" ]; then
-          rm -R ncnn
-        else
-          rm -R ncnn
-        fi
+      run: rm -R ncnn
       shell: bash
 
 branding:
